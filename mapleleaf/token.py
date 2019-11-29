@@ -7,3 +7,6 @@ class Token:
 
     def __str__(self):
         return self.type + " " + self.lexeme + " " + str(self.literal)
+
+    def __repr__(self):
+        return "Token(%s)" % self.type

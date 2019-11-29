@@ -1,2 +1,1 @@
-var s = "Hello";
-var t = "World"
+"Hello" * 7
