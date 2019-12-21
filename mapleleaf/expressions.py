@@ -87,3 +87,11 @@ class Unary(Expression):
             return not is_true(right)
         if self.operator == "MINUS" and isinstance(right, Number):
             return -right
+
+class Variable(Expression):
+    def __init__(self, name):
+        self.name = name
+
+    #To be implemented by interpreter
+    def evaluate(self):
+        pass
