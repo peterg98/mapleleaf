@@ -1,17 +1,7 @@
 from abc import ABC
 from numbers import Number
-
-def is_true(expr):
-    if expr == None: return False
-    if type(expr) == bool: return expr
-    if type(expr) == int or type(expr) == float: return expr == 0
-    if type(expr) == str: return expr == ""
-    return True
-
-def is_equal(left, right):
-    if left is None is right == None: return True
-    if left is None or right is None: return False
-    return left == right
+from utils import *
+from interpreter import Interpreter
 
 class Expression(ABC):
     def evaluate(self):
@@ -76,6 +66,22 @@ class Literal(Expression):
     def evaluate(self):
         return self.value
 
+class Logical(Expression):
+    def __init__(self, left, operator, right):
+        self.left = left
+        self.operator = operator
+        self.right = right
+
+    def evaluate(self):
+        left = self.left.evaluate()
+        if self.operator.type == "OR":
+            # Short circuit and 
+            if is_true(left): return left
+        # If operator is AND and if lvalue is false, then short circuit and return lvalue
+        else:
+            if not is_true(left): return left
+        return self.right.evaluate()
+
 class Unary(Expression):
     def __init__(self, operator, right):
         self.operator = operator
@@ -89,20 +95,18 @@ class Unary(Expression):
             return -right
 
 class Variable(Expression):
-    def __init__(self, name, environment):
+    def __init__(self, name):
         self.name = name
-        self.environment = environment
 
     def evaluate(self):
-        return self.environment[self.name]
+        return Interpreter.memory.get(self.name)
 
 class Assignment(Expression):
-    def __init__(self, name, value, environment):
+    def __init__(self, name, value):
         self.name = name
         self.value = value
-        self.environment = environment
 
     def evaluate(self):
         value = self.value.evaluate()
-        self.environment[self.name] = value
+        Interpreter.memory.assign(self.name, value)
         return value

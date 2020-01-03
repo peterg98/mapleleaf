@@ -9,9 +9,9 @@ class Lexer:
         self.current = 0
         self.line = 1
         self.keywords = {x: x.upper() for x in [
-            "and", "class", "else", "false", "for", "fun", "if",
+            "and", "class", "else", "false", "from", "fun", "if",
             "nil", "or", "print", "return", "super", "this", "true",
-            "var", "while"
+            "var", "until"
         ]}
 
     def is_at_end(self):

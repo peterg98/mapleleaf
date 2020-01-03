@@ -1,4 +1,7 @@
 from abc import ABC
+from utils import *
+from memory import Memory
+from interpreter import Interpreter
 
 class Statement(ABC):
     def execute(self):
@@ -7,13 +10,22 @@ class Statement(ABC):
 class Block(Statement):
     def __init__(self, statements):
         self.statements = statements
+        self.block_env = Memory(Interpreter.memory)
 
-# class Expression(Statement):
-#     def __init__(self, expression):
-#         self.expression = expression
+    def execute(self):
+        try:
+            Interpreter.memory = self.block_env
+            for statement in self.statements:
+                statement.execute()
+        finally:
+            Interpreter.memory = self.block_env.outer
 
-#     def execute(self):
-#         self.expression.evaluate()
+class Expression(Statement):
+    def __init__(self, expression):
+        self.expression = expression
+
+    def execute(self):
+        self.expression.evaluate()
 
 class Print(Statement):
     def __init__(self, expression):
@@ -24,13 +36,36 @@ class Print(Statement):
         print(value)
 
 class VariableInitializer(Statement):
-    def __init__(self, name, initializer, environment):
+    def __init__(self, name, initializer):
         self.name = name
         self.initializer = initializer
-        self.environment = environment
 
-    def execute(self, statement):
+    def execute(self):
         value = None
-        if self.initializer is None:
+        if self.initializer is not None:
             value = self.initializer.evaluate()
-        self.environment[name] = value
+        Interpreter.memory.define(self.name, value)
+
+class If(Statement):
+    def __init__(self, condition, then, _else):
+        self.condition = condition
+        self.then = then
+        self._else = _else
+
+    def execute(self):
+        if is_true(self.condition.evaluate()):
+            self.then.execute()
+        elif self._else != None:
+            self._else.execute()
+    
+class Until(Statement):
+    def __init__(self, condition, statement):
+        self.condition = condition
+        self.statement = statement
+
+    def execute(self):
+        while is_true(self.condition.evaluate()):
+            self.statement.execute()
+
+# class From(Statement):
+#     def __init__(self, initializer, condition, in)

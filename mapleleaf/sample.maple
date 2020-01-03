@@ -1,3 +1,5 @@
-print ("one"+"one");
-print true;
-print 2 + 1;
+var i = 0;
+until (i < 15) {
+    print("Hello");
+    i = i + 1;
+};
