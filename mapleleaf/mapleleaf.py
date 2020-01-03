@@ -31,10 +31,12 @@ def run_from_prompt():
 def run(source):
     lex = lexer.Lexer(source)
     tokens = lex.scan_tokens()
+
     parser = mapleparser.Parser(tokens)
-    expression = parser.parse()
+    statements = parser.parse()
+
     interpret = interpreter.Interpreter()
-    result = interpret.interpret(expression)
+    result = interpret.interpret(statements)
 
 if __name__ == "__main__":
     run_file("sample.maple")

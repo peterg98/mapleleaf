@@ -1,9 +1,12 @@
 import mapleleaf
+from memory import Memory
 
 class Interpreter:
-    def interpret(self, expression):
+    def __init__(self):
+        self.memory = Memory()
+    def interpret(self, statements):
         try:
-            result = expression.evaluate()
-            print(result)
+            for statement in statements:
+                statement.execute()
         except RuntimeError as e:
             mapleleaf.report_runtime_error(e)

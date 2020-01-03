@@ -89,9 +89,20 @@ class Unary(Expression):
             return -right
 
 class Variable(Expression):
-    def __init__(self, name):
+    def __init__(self, name, environment):
         self.name = name
+        self.environment = environment
 
-    #To be implemented by interpreter
     def evaluate(self):
-        pass
+        return self.environment[self.name]
+
+class Assignment(Expression):
+    def __init__(self, name, value, environment):
+        self.name = name
+        self.value = value
+        self.environment = environment
+
+    def evaluate(self):
+        value = self.value.evaluate()
+        self.environment[self.name] = value
+        return value
