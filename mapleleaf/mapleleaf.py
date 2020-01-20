@@ -16,7 +16,7 @@ def report_error(line_number, message):
     error = True
 
 def report_runtime_error(error):
-    print("Runtime error with message: {1}".format(error.message))
+    print("Runtime error with message: {0}".format(error))
 
 def run_file(file):
     with open(file, 'rb') as f:

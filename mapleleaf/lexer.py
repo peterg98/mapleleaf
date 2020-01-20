@@ -1,5 +1,5 @@
 from token import Token
-from mapleleaf import report_error
+import mapleleaf
 
 class Lexer:
     def __init__(self, source):
@@ -57,7 +57,7 @@ class Lexer:
             elif char.isalpha():
                 self.identifier()
             else:
-                report_error(self.line, "Invalid character for identifier.")
+                mapleleaf.report_error(self.line, "Invalid character for identifier.")
 
 
     def add_token(self, type, literal=None):
@@ -85,7 +85,7 @@ class Lexer:
         
         #call this when string does not have a closing double quote
         if self.is_at_end():
-            report_error(self.line, "Unterminated string.")
+            mapleleaf.report_error(self.line, "Unterminated string.")
             return
 
         #Advance to the closing "

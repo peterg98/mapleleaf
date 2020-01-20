@@ -1,7 +1,7 @@
 from abc import ABC
 from numbers import Number
 from utils import *
-from interpreter import Interpreter
+import interpreter
 
 class Expression(ABC):
     def evaluate(self):
@@ -99,7 +99,7 @@ class Variable(Expression):
         self.name = name
 
     def evaluate(self):
-        return Interpreter.memory.get(self.name)
+        return interpreter.Interpreter.memory.get(self.name)
 
 class Assignment(Expression):
     def __init__(self, name, value):
@@ -108,5 +108,5 @@ class Assignment(Expression):
 
     def evaluate(self):
         value = self.value.evaluate()
-        Interpreter.memory.assign(self.name, value)
+        interpreter.Interpreter.memory.assign(self.name, value)
         return value

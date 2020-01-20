@@ -1,7 +1,7 @@
 from abc import ABC
 from utils import *
 from memory import Memory
-from interpreter import Interpreter
+import interpreter
 
 class Statement(ABC):
     def execute(self):
@@ -10,15 +10,16 @@ class Statement(ABC):
 class Block(Statement):
     def __init__(self, statements):
         self.statements = statements
-        self.block_env = Memory(Interpreter.memory)
 
     def execute(self):
+        block_env = Memory()
+        block_env.outer = interpreter.Interpreter.memory
         try:
-            Interpreter.memory = self.block_env
+            interpreter.Interpreter.memory = block_env
             for statement in self.statements:
                 statement.execute()
         finally:
-            Interpreter.memory = self.block_env.outer
+            interpreter.Interpreter.memory = block_env.outer
 
 class Expression(Statement):
     def __init__(self, expression):
@@ -44,7 +45,7 @@ class VariableInitializer(Statement):
         value = None
         if self.initializer is not None:
             value = self.initializer.evaluate()
-        Interpreter.memory.define(self.name, value)
+        interpreter.Interpreter.memory.define(self.name, value)
 
 class If(Statement):
     def __init__(self, condition, then, _else):
@@ -67,5 +68,7 @@ class Until(Statement):
         while is_true(self.condition.evaluate()):
             self.statement.execute()
 
-# class From(Statement):
-#     def __init__(self, initializer, condition, in)
+class From(Statement):
+    def __init__(self, initializer, condition):
+        self.initializer = initializer
+        self.condition = condition

@@ -2,11 +2,9 @@ import mapleleaf
 from errors import *
 from expressions import *
 from statements import *
-from interpreter import Interpreter
 
-class Parser(Interpreter):
+class Parser:
     def __init__(self, tokens):
-        # Reference memory of the interpreter
         self.tokens = tokens
         self.current = 0
 
@@ -44,7 +42,7 @@ class Parser(Interpreter):
         return self.expression_statement()
 
     def from_statement(self):
-        self.consume("LEFT_PAREN", "Expect")
+        self.consume("LEFT_PAREN", "Expected a Left parenthesis")
 
         # Initializer was skipped, no initializer
         if self.match("SEMICOLON"):
@@ -67,7 +65,7 @@ class Parser(Interpreter):
             increment = self.expression()
         self.consume("RIGHT_PAREN", "Expected a ) after from clause")
         body = self.statement()
-        
+
         # If an increment exists, it is executed after the body
         if increment is not None:
             body = Block([body, Expression(increment)])
@@ -75,7 +73,8 @@ class Parser(Interpreter):
         # If a condition does not exist, it is the same as a while loop
         if condition is None:
             condition = Literal(True)
-            body = Until(condition, body)
+        
+        body = Until(condition, body)
 
         if initializer is not None:
             body = Block([initializer, body])
