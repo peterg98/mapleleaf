@@ -19,6 +19,8 @@ class BinaryExp(Expression):
         if self.operator.type == "PLUS":
             if (isinstance(left, Number) and isinstance(right, Number)) or (isinstance(left, str) and isinstance(right, str)):
                 return left + right
+            elif (isinstance(left, str) and isinstance(right, Number)) or (isinstance(left, Number) and isinstance(right, str)):
+                return str(left) + str(right)
         if self.operator.type == "MINUS":
             if (isinstance(left, Number) and isinstance(right, Number)):
                 return left - right

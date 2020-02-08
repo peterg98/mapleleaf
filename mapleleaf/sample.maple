@@ -1,4 +1,4 @@
-var s = "Hello";
-var t = "ell";
-
-print(s-t);
+{
+    var a = 0;
+    print("Printing from inside block" + a);
+}
