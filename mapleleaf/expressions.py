@@ -22,10 +22,16 @@ class BinaryExp(Expression):
         if self.operator.type == "MINUS":
             if (isinstance(left, Number) and isinstance(right, Number)):
                 return left - right
+            
+            # Removes the first occurence of right from left, if it is present
             if isinstance(left, str) and isinstance(right, str):
                 if len(right) > len(left):
                     raise RuntimeError("Length of second string is greater than the first string.")
-                #Implement KMP algorithm here
+                # Implement KMP algorithm later, but for now, do it the obvious way
+                start = left.find(right)
+                if start != -1:
+                    return left[0:start] + left[start+len(right):]
+                return left
         if self.operator.type == "GREATER":
             if isinstance(left, Number) and isinstance(right, Number):
                 return left > right
