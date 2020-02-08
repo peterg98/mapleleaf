@@ -64,16 +64,16 @@ class Parser:
         if not self.check("RIGHT_PAREN"):
             increment = self.expression()
         self.consume("RIGHT_PAREN", "Expected a ) after from clause")
-        body = self.statement()
+        body = Block([self.statement()])
 
         # If an increment exists, it is executed after the body
         if increment is not None:
-            body = Block([body, Expression(increment)])
+            body.statements.append(Expression(increment))
         
         # If a condition does not exist, it is the same as a while loop
         if condition is None:
             condition = Literal(True)
-        
+
         body = Until(condition, body)
 
         if initializer is not None:

@@ -7,7 +7,7 @@ class Memory(dict):
             return self[name]
         # Recursively retrieve the variable in outer scopes
         if self.outer is not None:
-            return self.outer[name]
+            return self.outer.get(name)
         
         raise RuntimeError("%s is not defined." % name)
 
